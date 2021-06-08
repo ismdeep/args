@@ -2,6 +2,7 @@ package args
 
 import (
 	"os"
+	"reflect"
 	"testing"
 )
 
@@ -96,6 +97,37 @@ func TestGetInt(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := GetInt(tt.args.key); got != tt.want {
 				t.Errorf("GetInt() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestGetValueList(t *testing.T) {
+	os.Args = append(os.Args, "-d")
+	os.Args = append(os.Args, "dir1")
+	os.Args = append(os.Args, "-d")
+	os.Args = append(os.Args, "dir2")
+
+	type args struct {
+		key string
+	}
+	tests := []struct {
+		name string
+		args args
+		want []string
+	}{
+		{
+			name: "TestGetValueList-001",
+			args: args{
+				key: "-d",
+			},
+			want: []string{"dir1", "dir2"},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := GetValueList(tt.args.key); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("GetValueList() = %v, want %v", got, tt.want)
 			}
 		})
 	}

@@ -23,6 +23,16 @@ func GetValue(key string) string {
 	return ""
 }
 
+func GetValueList(key string) []string {
+	valueList := make([]string, 0)
+	for i := 1; i < len(os.Args)-1; i++ {
+		if os.Args[i] == key {
+			valueList = append(valueList, os.Args[i+1])
+		}
+	}
+	return valueList
+}
+
 func GetInt(key string) int {
 	str := GetValue(key)
 	val, err := strconv.Atoi(str)
